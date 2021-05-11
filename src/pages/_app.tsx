@@ -1,5 +1,6 @@
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
-import { Provider, createClient } from "urql";
+import { cacheExchange } from "@urql/exchange-graphcache";
+import { Provider, createClient, dedupExchange, fetchExchange } from "urql";
 
 import theme from "../theme";
 
@@ -8,6 +9,18 @@ const client = createClient({
   fetchOptions: {
     credentials: "include",
   },
+  // 이 부분 잘 모르겠다
+  // urql에서 cache와 관련된 부분을 개인적으로 찾아봐야 할 듯.
+  // 3:30 분쯤인데 나중에 참고하자.
+  // exchanges:[dedupExchange,cacheExchange({
+  //   updates:{
+  //     Mutation:{
+  //       login:(result,args,cache,info) => {
+
+  //       }
+  //     }
+  //   }
+  // }),fetchExchange]
 });
 
 function MyApp({ Component, pageProps }) {
