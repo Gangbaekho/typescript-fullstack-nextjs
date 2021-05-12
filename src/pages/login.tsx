@@ -17,8 +17,8 @@ import { useRouter } from "next/router";
 // options라는 것을 받아서
 // 객체로 넘겨준다는 것이 여기서는 포인트이다.
 const LOGIN_MUT = `
-mutation Login($options:UsernamePasswordInput!){
-    login(options:$options){
+mutation Login($usernameOrEmail:String!,$password:String!){
+    login(usernameOrEmail:$usernameOrEmail,password:$password){
       errors{
         field
         message
@@ -39,13 +39,13 @@ const Login: React.FC<{}> = ({}) => {
   return (
     <Wrapper variant="small">
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
           console.log(values);
-          const response = await login({ options: values });
+          const response = await login(values);
           if (response.data?.login.errors) {
             setErrors({
-              username: "hey Im an error",
+              usernameOrEmail: "hey Im an error",
             });
           } else if (response.data?.login.user) {
             // worked
@@ -56,9 +56,9 @@ const Login: React.FC<{}> = ({}) => {
         {(isSubmmiting) => (
           <Form>
             <InputField
-              name="username"
-              placeholder="username"
-              label="Username"
+              name="usernameOrEmail"
+              placeholder="username or Email"
+              label="Username Or Email"
             />
             <Box mt={4}>
               <InputField

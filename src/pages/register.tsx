@@ -16,8 +16,8 @@ import { useRouter } from "next/router";
 interface registerProps {}
 
 const REGISTER_MUT = `
-mutation Register($username:String!, $password:String!){
-  register(options:{username:$username,password:$password}){
+mutation Register($options:UsernamePasswordInput!){
+  register(options:$options){
     errors{
       field
       message
@@ -38,14 +38,14 @@ const Register: React.FC<registerProps> = ({}) => {
   return (
     <Wrapper variant="small">
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ email: "", username: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
           console.log(values);
           // 일단 여기에서 Response가 any라고 나와서
           // 어떤 response가 나올지 예측할 수 없다.
           // 이걸 codegen? 이런것을 통해서 Response를 fix할 수 있는게 있는데,
           // 그건 나중에 알아보도록 하자.
-          const response = await register(values);
+          const response = await register({ options: values });
           if (response.data?.register.errors) {
             setErrors({
               username: "hey Im an error",
@@ -63,6 +63,14 @@ const Register: React.FC<registerProps> = ({}) => {
               placeholder="username"
               label="Username"
             />
+            <Box mt={4}>
+              <InputField
+                name="email"
+                placeholder="email"
+                label="Email"
+                type="email"
+              />
+            </Box>
             <Box mt={4}>
               <InputField
                 name="password"

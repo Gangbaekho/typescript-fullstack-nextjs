@@ -21,7 +21,11 @@ const Index = () => {
       <NavBar />
       <div>hello world</div>
       <br />
-      {!data ? null : data.posts.map((p) => <div key={p.id}>{p.title}</div>)}
+      {!data ? (
+        <div>Loading...</div>
+      ) : (
+        data.posts.map((p) => <div key={p.id}>{p.title}</div>)
+      )}
     </>
   );
 };
